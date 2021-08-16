@@ -115,7 +115,9 @@ bool server_is_fail_signal(int signo)
     case SIGILL:
     case SIGFPE:
     case SIGABRT:
+    case SIGTERM:
     case SIGSYS:
+    case SIGQUIT:
         return true;
     default:;
     }
@@ -274,7 +276,7 @@ void server_init_signals_should_register(int* psignos, int sz)
 
 void server_init_default_signals_should_register(void)
 {
-    int signals[] = { SIGILL, SIGTERM, SIGINT, SIGQUIT, SIGABRT, SIGSEGV, SIGFPE, SIGBUS, SIGSYS, SIGUSR1, SIGUSR2 };
+    int signals[] = { SIGILL, SIGINT, SIGQUIT, SIGSEGV, SIGFPE, SIGBUS, SIGSYS, SIGUSR1, SIGUSR2 };
 
     server_init_signals_should_register(signals, sizeof(signals) / sizeof(int));
 }
