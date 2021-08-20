@@ -115,9 +115,6 @@ bool server_is_fail_signal(int signo)
     case SIGILL:
     case SIGFPE:
     case SIGABRT:
-    case SIGTERM:
-    case SIGSYS:
-    case SIGQUIT:
         return true;
     default:;
     }
@@ -276,7 +273,7 @@ void server_init_signals_should_register(int* psignos, int sz)
 
 void server_init_default_signals_should_register(void)
 {
-    int signals[] = { SIGILL, SIGINT, SIGQUIT, SIGSEGV, SIGFPE, SIGBUS, SIGSYS, SIGUSR1, SIGUSR2 };
+    int signals[] = { SIGTERM, SIGABRT, SIGILL, SIGINT, SIGQUIT, SIGSEGV, SIGFPE, SIGBUS, SIGSYS, SIGUSR1, SIGUSR2 };
 
     server_init_signals_should_register(signals, sizeof(signals) / sizeof(int));
 }
@@ -310,7 +307,7 @@ void SRV_PRIV_C_WRAPPABLE_FUNC(server_mt_init_daemon)(server_exit_callback_ft ex
 
     lock_signals();
 
-    set_signals_callback(sig_callback, false);
+    set_signals_callback(sig_callback, true);
 }
 
 void SRV_PRIV_C_WRAPPABLE_FUNC(server_mt_init)(server_exit_callback_ft exit_callback,
@@ -321,7 +318,7 @@ void SRV_PRIV_C_WRAPPABLE_FUNC(server_mt_init)(server_exit_callback_ft exit_call
 
     lock_signals();
 
-    set_signals_callback(sig_callback, false);
+    set_signals_callback(sig_callback, true);
 }
 
 void server_mt_wait_sig_callback(server_sig_callback_ft sig_callback)
